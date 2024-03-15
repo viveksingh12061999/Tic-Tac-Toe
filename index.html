@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Tic-Tac-Toe</title>
+</head>
+
+<style>
+    .tic-tac-toe {
+    }
+
+    .tic-tac-toe .row {
+        display: flex;
+    }
+
+    .tic-tac-toe .cell {
+        width: 30px;
+        height: 30px;
+        border: 1px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+ </style>
+
+<body>
+    <div class="tic-tac-toe">
+
+    </div>
+    <script>
+        const gridsize = 6;
+        let currentplayer = 'X';
+        const game = [];
+        const board = document.querySelector('.tic-tac-toe');
+
+        function createboard() {
+            for (let j = 0; j < gridsize; j++) {
+                const row = document.createElement('div');
+                row.className = "row";
+
+
+                for (let i = 0; i < gridsize; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = "cell";
+                    cell.setAttribute('data-row', j);
+                    cell.setAttribute('data-cell', i);
+                    row.appendChild(cell);
+                }
+
+                document.querySelector('.tic-tac-toe').appendChild(row);
+            }
+
+            
+        }
+        function playerchange(){
+            currentplayer = currentplayer === 'X'? 'O':'X';
+        }
+         
+        function addEventListener(){
+            const board = document.querySelector('.tic-tac-toe');
+            board.addEventListener('click', function(e){
+                if (e.target.nodeName === 'DIV'){
+                    if(e.target.classList.contains('cell')){
+                        e.target.innerText= currentplayer;
+                        const rowID = e.target.dataset.row;
+                        const cellId = e.target.dataset.cell; 
+                        updategamedata(rowID,cellId, currentplayer);
+                        playerchange();
+                    } 
+                }
+            })
+        }
+
+        function winner(){
+            //check for rows
+            for (let i = 0; i < game.length; i++){
+                if (checkline(game[i])){
+                    return true;
+                }
+            }
+            // check for columns
+            for (let i = 0; i < game.length; i++){
+                const colvalues= game.map(row => row[i]);
+                if (checkline(columnvalues)){
+                    return true;
+                }
+            }
+            // check for diagonals
+            for (let i = 0; i < game.length; i++){
+                const diagvalues= game.map((row,idx) => row[idx]);
+                if (checkline(columnvalues)){
+                    return true;
+                }
+
+                const reversediagvalues= game.map((row,idx) => row[game-i-1]);
+                if (checkline(columnvalues)){
+                    return true;
+                }
+
+                
+            }
+
+        }
+
+        function checkline(arr){
+              return arr.every((data) => arr[0]===data && data !==undefined);
+        }
+
+        function updategamedata(row,col,value){
+            console.log(row, col, value);
+            if(!game[row]){
+                game[row]= [];
+            }
+
+            game[row][col] = value;
+
+        }
+        createboard();
+        addEventListener();
+        winner();
+
+    </script>
+
+</body>
+
+
+</html>
